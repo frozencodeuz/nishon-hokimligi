@@ -4,82 +4,408 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Nishon tuman hokimligi</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Nunito:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy: #0B1F3A;
+      --navy-mid: #162D50;
+      --navy-light: #1E3F6F;
+      --gold: #C6953A;
+      --gold-light: #E2B96A;
+      --gold-pale: #F5E4C0;
+      --cream: #F9F4EC;
+      --white: #FFFFFF;
+      --text-muted: rgba(255,255,255,0.5);
+    }
+
     body {
-      background: #f5f7fa;
+      min-height: 100vh;
+      background: var(--navy);
+      font-family: 'Nunito', sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1rem;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Geometric SVG background pattern */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cg fill='none' stroke='%23C6953A' stroke-width='0.4' opacity='0.18'%3E%3Cpolygon points='60,10 110,35 110,85 60,110 10,85 10,35'/%3E%3Cpolygon points='60,22 98,42 98,78 60,98 22,78 22,42'/%3E%3Cline x1='60' y1='10' x2='60' y2='110'/%3E%3Cline x1='10' y1='35' x2='110' y2='85'/%3E%3Cline x1='110' y1='35' x2='10' y2='85'/%3E%3Ccircle cx='60' cy='60' r='12'/%3E%3C/g%3E%3C/svg%3E");
+      background-size: 120px 120px;
+      z-index: 0;
+    }
+
+    /* Radial glow behind card */
+    body::after {
+      content: '';
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 700px;
+      height: 700px;
+      background: radial-gradient(circle, rgba(198,149,58,0.10) 0%, transparent 65%);
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .page-wrap {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 440px;
+    }
+
+    /* ── Header ── */
+    .header {
+      text-align: center;
+      margin-bottom: 2.4rem;
+      animation: fadeDown 0.7s ease both;
+    }
+
+    .emblem {
+      width: 72px;
+      height: 72px;
+      margin: 0 auto 1.1rem;
+      border-radius: 50%;
+      border: 1.5px solid var(--gold);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(198,149,58,0.08);
+      position: relative;
+    }
+
+    .emblem::before {
+      content: '';
+      position: absolute;
+      inset: 5px;
+      border-radius: 50%;
+      border: 0.5px solid rgba(198,149,58,0.4);
+    }
+
+    .emblem svg {
+      width: 36px;
+      height: 36px;
+    }
+
+    .supratitle {
+      font-size: 10px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-weight: 500;
+      font-family: 'Nunito', sans-serif;
+      margin-bottom: 0.55rem;
+    }
+
+    .main-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 26px;
+      font-weight: 600;
+      color: var(--white);
+      line-height: 1.25;
+      letter-spacing: 0.01em;
+    }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 1.1rem auto 0;
+      justify-content: center;
+    }
+
+    .divider-line {
+      width: 48px;
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--gold));
+    }
+
+    .divider-line:last-child {
+      background: linear-gradient(to left, transparent, var(--gold));
+    }
+
+    .divider-diamond {
+      width: 6px;
+      height: 6px;
+      background: var(--gold);
+      transform: rotate(45deg);
+    }
+
+    /* ── Card ── */
+    .card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(198,149,58,0.22);
+      border-radius: 20px;
+      padding: 2rem 1.75rem;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      animation: fadeUp 0.8s 0.15s ease both;
+    }
+
+    .card-label {
+      text-align: center;
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      font-weight: 400;
+      margin-bottom: 1.6rem;
+    }
+
+    /* ── Links ── */
+    .links {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .link-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 16px;
+      border-radius: 12px;
+      border: 1px solid rgba(198,149,58,0.16);
+      background: rgba(255,255,255,0.03);
+      text-decoration: none;
+      color: var(--white);
+      font-size: 14px;
+      font-weight: 400;
+      font-family: 'Nunito', sans-serif;
+      letter-spacing: 0.01em;
+      transition: background 0.22s, border-color 0.22s, transform 0.18s;
+      position: relative;
+      overflow: hidden;
+      animation: fadeUp 0.6s ease both;
+    }
+
+    .link-item::after {
+      content: '';
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 5px;
+      height: 5px;
+      border-right: 1.5px solid rgba(198,149,58,0.5);
+      border-top: 1.5px solid rgba(198,149,58,0.5);
+      transform: translateY(-50%) rotate(45deg);
+      transition: border-color 0.2s;
+    }
+
+    .link-item:hover {
+      background: rgba(198,149,58,0.10);
+      border-color: rgba(198,149,58,0.5);
+      transform: translateX(3px);
+    }
+
+    .link-item:hover::after {
+      border-color: var(--gold-light);
+    }
+
+    .link-item:nth-child(1) { animation-delay: 0.25s; }
+    .link-item:nth-child(2) { animation-delay: 0.32s; }
+    .link-item:nth-child(3) { animation-delay: 0.39s; }
+    .link-item:nth-child(4) { animation-delay: 0.46s; }
+    .link-item:nth-child(5) { animation-delay: 0.53s; }
+    .link-item:nth-child(6) { animation-delay: 0.60s; }
+
+    .icon-wrap {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      background: rgba(198,149,58,0.12);
+      border: 1px solid rgba(198,149,58,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .icon-wrap svg {
+      width: 17px;
+      height: 17px;
+    }
+
+    .link-text-wrap {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.3;
+    }
+
+    .link-name {
+      color: #e8e4dc;
+      font-weight: 500;
+      font-size: 13.5px;
+    }
+
+    .link-sub {
+      color: rgba(255,255,255,0.38);
+      font-size: 11px;
+      font-weight: 300;
+      margin-top: 1px;
+    }
+
+    /* ── Footer ── */
+    .footer {
+      text-align: center;
+      margin-top: 1.8rem;
+      font-size: 11px;
+      color: rgba(255,255,255,0.25);
+      font-family: 'Nunito', sans-serif;
+      letter-spacing: 0.05em;
+      animation: fadeUp 0.7s 0.7s ease both;
+    }
+
+    /* ── Animations ── */
+    @keyframes fadeDown {
+      from { opacity: 0; transform: translateY(-18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 480px) {
+      .main-title { font-size: 22px; }
+      .card { padding: 1.6rem 1.25rem; }
     }
   </style>
 </head>
+<body>
 
-<body class="flex items-center justify-center min-h-screen text-gray-800">
+<div class="page-wrap">
 
-  <div class="w-full max-w-md">
-
-    <!-- HEADER -->
-    <div class="text-center mb-6">
-      <p class="text-xs tracking-widest text-gray-500 uppercase">
-        O‘zbekiston Respublikasi
-      </p>
-
-      <h1 class="text-lg font-semibold mt-1">
-        Nishon tuman hokimligi
-      </h1>
-
-      <div class="w-12 h-[2px] bg-blue-700 mx-auto mt-3"></div>
+  <!-- Header -->
+  <div class="header">
+    <div class="emblem">
+      <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="18,3 33,11 33,25 18,33 3,25 3,11" stroke="#C6953A" stroke-width="1.2" fill="none"/>
+        <polygon points="18,8 28,13.5 28,22.5 18,28 8,22.5 8,13.5" stroke="#C6953A" stroke-width="0.7" fill="rgba(198,149,58,0.08)"/>
+        <circle cx="18" cy="18" r="4.5" stroke="#C6953A" stroke-width="1" fill="rgba(198,149,58,0.15)"/>
+        <line x1="18" y1="3" x2="18" y2="33" stroke="#C6953A" stroke-width="0.5" opacity="0.5"/>
+        <line x1="3" y1="11" x2="33" y2="25" stroke="#C6953A" stroke-width="0.5" opacity="0.5"/>
+        <line x1="33" y1="11" x2="3" y2="25" stroke="#C6953A" stroke-width="0.5" opacity="0.5"/>
+      </svg>
     </div>
-
-    <!-- CARD -->
-    <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5">
-
-      <p class="text-sm text-gray-500 text-center mb-5">
-        Rasmiy axborot manbalari
-      </p>
-
-      <!-- LINKS -->
-      <div class="space-y-3 text-sm">
-
-        <a href="https://gov.uz/oz/nishontuman" target="_blank"
-          class="block border border-gray-300 py-3 px-4 rounded-lg hover:bg-gray-50 transition">
-          🌐 Rasmiy veb-sayt
-        </a>
-
-        <a href="https://t.me/Nishonhokimligi" target="_blank"
-          class="block border border-gray-300 py-3 px-4 rounded-lg hover:bg-gray-50 transition">
-          📢 Telegram kanali
-        </a>
-
-        <a href="https://instagram.com/nishonhokimligi" target="_blank"
-          class="block border border-gray-300 py-3 px-4 rounded-lg hover:bg-gray-50 transition">
-          📸 Instagram sahifa
-        </a>
-
-        <a href="https://www.facebook.com/share/179EF4RBWJ/" target="_blank"
-          class="block border border-gray-300 py-3 px-4 rounded-lg hover:bg-gray-50 transition">
-          👍 Facebook sahifa
-        </a>
-
-        <a href="http://www.youtube.com/@Nishonhokimligi" target="_blank"
-          class="block border border-gray-300 py-3 px-4 rounded-lg hover:bg-gray-50 transition">
-          ▶️ YouTube kanal
-        </a>
-
-        <a href="https://www.tiktok.com/@nishontumanhokimligi?_r=1&_t=ZS-95YEGHiJImX" target="_blank"
-          class="block border border-gray-300 py-3 px-4 rounded-lg hover:bg-gray-50 transition">
-          🎵 TikTok sahifa
-        </a>
-
-      </div>
-
+    <p class="supratitle">O'zbekiston Respublikasi</p>
+    <h1 class="main-title">Nishon tuman hokimligi</h1>
+    <div class="divider">
+      <div class="divider-line"></div>
+      <div class="divider-diamond"></div>
+      <div class="divider-line"></div>
     </div>
-
-    <!-- FOOTER -->
-    <div class="text-center mt-6 text-xs text-gray-400">
-      © 2026 Nishon tuman hokimligi
-    </div>
-
   </div>
+
+  <!-- Card -->
+  <div class="card">
+    <p class="card-label">Rasmiy axborot manbalari</p>
+
+    <div class="links">
+
+      <!-- Rasmiy veb-sayt -->
+      <a class="link-item" href="https://gov.uz/oz/nishontuman" target="_blank">
+        <div class="icon-wrap">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="12" cy="12" r="9" stroke="#C6953A" stroke-width="1.5"/>
+            <ellipse cx="12" cy="12" rx="4" ry="9" stroke="#C6953A" stroke-width="1.2"/>
+            <line x1="3" y1="12" x2="21" y2="12" stroke="#C6953A" stroke-width="1.2"/>
+            <line x1="5" y1="7" x2="19" y2="7" stroke="#C6953A" stroke-width="0.8"/>
+            <line x1="5" y1="17" x2="19" y2="17" stroke="#C6953A" stroke-width="0.8"/>
+          </svg>
+        </div>
+        <div class="link-text-wrap">
+          <span class="link-name">Rasmiy veb-sayt</span>
+          <span class="link-sub">gov.uz/oz/nishontuman</span>
+        </div>
+      </a>
+
+      <!-- Telegram -->
+      <a class="link-item" href="https://t.me/Nishonhokimligi" target="_blank">
+        <div class="icon-wrap">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M21 5L2 12.5l7 1M21 5l-5 14-4.5-5.5M21 5L9 13.5M9 13.5l1.5 5.5L13.5 15" stroke="#C6953A" stroke-width="1.5" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="link-text-wrap">
+          <span class="link-name">Telegram kanali</span>
+          <span class="link-sub">@Nishonhokimligi</span>
+        </div>
+      </a>
+
+      <!-- Instagram -->
+      <a class="link-item" href="https://instagram.com/nishonhokimligi" target="_blank">
+        <div class="icon-wrap">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="3" y="3" width="18" height="18" rx="5" stroke="#C6953A" stroke-width="1.5"/>
+            <circle cx="12" cy="12" r="4" stroke="#C6953A" stroke-width="1.4"/>
+            <circle cx="17.5" cy="6.5" r="1" fill="#C6953A"/>
+          </svg>
+        </div>
+        <div class="link-text-wrap">
+          <span class="link-name">Instagram sahifa</span>
+          <span class="link-sub">@nishonhokimligi</span>
+        </div>
+      </a>
+
+      <!-- Facebook -->
+      <a class="link-item" href="https://www.facebook.com/share/179EF4RBWJ/" target="_blank">
+        <div class="icon-wrap">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M18 3h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V8a1 1 0 0 1 1-1h3z" stroke="#C6953A" stroke-width="1.5" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="link-text-wrap">
+          <span class="link-name">Facebook sahifa</span>
+          <span class="link-sub">Nishon hokimligi</span>
+        </div>
+      </a>
+
+      <!-- YouTube -->
+      <a class="link-item" href="http://www.youtube.com/@Nishonhokimligi" target="_blank">
+        <div class="icon-wrap">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="2" y="5" width="20" height="14" rx="4" stroke="#C6953A" stroke-width="1.5"/>
+            <polygon points="10,9 16,12 10,15" fill="#C6953A"/>
+          </svg>
+        </div>
+        <div class="link-text-wrap">
+          <span class="link-name">YouTube kanal</span>
+          <span class="link-sub">@Nishonhokimligi</span>
+        </div>
+      </a>
+
+      <!-- TikTok -->
+      <a class="link-item" href="https://www.tiktok.com/@nishontumanhokimligi?_r=1&_t=ZS-95YEGHiJImX" target="_blank">
+        <div class="icon-wrap">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5" stroke="#C6953A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="link-text-wrap">
+          <span class="link-name">TikTok sahifa</span>
+          <span class="link-sub">@nishontumanhokimligi</span>
+        </div>
+      </a>
+
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">© 2026 &nbsp;·&nbsp; Nishon tuman hokimligi</div>
+
+</div>
 
 </body>
 </html>
